@@ -1,54 +1,56 @@
 import { BasePage } from './BasePage';
+import { regSel, loginSel } from '../selectors/nopCommerceSelectors';
 
 export class RegisterPage extends BasePage {
-  /* ---------- selectors ---------- */
-  private registerTab   = `//a[@class='ico-register']`;
-  private maleRadio     = '//input[@id="gender-male"]';
-  private firstNameInp  = '//input[@id="FirstName"]';
-  private lastNameInp   = '//input[@id="LastName"]';
-  private emailInp      = '//input[@id="Email"]';
-  private pwdInp        = '//input[@id="Password"]';
-  private confirmPwdInp = '//input[@id="ConfirmPassword"]';
-  private regBtn        = '//button[@id="register-button"]';
-  private continueBtn   = '//a[contains(text(),"Continue")]';
-
-  private loginTab      = `//a[@class='ico-login']`;
-  private loginEmailInp = '//input[@id="Email"]';
-  private loginPwdInp   = '//input[@id="Password"]';
-  private loginBtn      = '//button[contains(@class,"login-button")]';
-  private logoutLnk     = `//a[@class='ico-logout']`;
-
-  /* ---------- helpers ---------- */
   private genEmail() { return `auto${Date.now()}@yopmail.com`; }
 
-  /* ---------- 1 lượt từ Register → Login ---------- */
+  /* ---------- 1 lượt Register → Login → Logout ---------- */
   async registerLoginContinuous(first: string, last: string, pwd: string) {
-    /* ---- REGISTER ---- */
+    console.log('[REG] 1. Go homepage');
     await this.page.goto('https://demo.nopcommerce.com');
-    await this.page.click(this.registerTab);
 
-    await this.page.check(this.maleRadio);
-    await this.page.fill(this.firstNameInp, first);
-    await this.page.fill(this.lastNameInp, last);
+    console.log('[REG] 2. Open register form');
+    await this.page.click(regSel.tab);
 
+    console.log('[REG] 3. Fill credentials');
+    await this.page.check(regSel.maleRadio);
+    await this.page.fill(regSel.firstName, first);
+    await this.page.fill(regSel.lastName, last);
     const email = this.genEmail();
-    await this.page.fill(this.emailInp, email);
-    await this.page.fill(this.pwdInp, pwd);
-    await this.page.fill(this.confirmPwdInp, pwd);
-    await this.page.click(this.regBtn);
+    await this.page.fill(regSel.email, email);
+    await this.page.fill(regSel.password, pwd);
+    await this.page.fill(regSel.confirmPwd, pwd);
+
+    console.log('[REG] 4. Submit register');
+    await this.page.click(regSel.regBtn);
     await this.page.waitForLoadState('networkidle');
 
-    // chờ Continue thực sự hiện & clickable
-    await this.page.locator(this.continueBtn).waitFor({ state: 'visible', timeout: 15000 });
-    await this.page.click(this.continueBtn, { force: true });
+    console.log('[REG] 5. Click Continue');
+    await this.page.locator(regSel.continueBtn).waitFor({ state: 'visible', timeout: 15000 });
+    await this.page.click(regSel.continueBtn, { force: true });
 
-    /* ---- LOGIN luôn ---- */
-    await this.page.click(this.loginTab);
-    await this.page.fill(this.loginEmailInp, email);
-    await this.page.fill(this.loginPwdInp, pwd);
-    await this.page.click(this.loginBtn);
-    await this.page.waitForSelector(this.logoutLnk, { state: 'visible' });
+    console.log('[LOGIN] 6. Open login form');
+    await this.page.click(loginSel.logoutLnk);
+    await this.scrollToBottom();          // scroll sau click
+    await this.page.click(loginSel.tab);
+    console.log('[LOGIN] 7. Fill login');
+    await this.page.fill(loginSel.email, email);
+    await this.page.fill(loginSel.password, pwd);
 
-    console.log(`[DONE] Registered & logged-in with ${genEmail}`);
+    console.log('[LOGIN] 8. Submit login');
+    await this.page.click(loginSel.submitBtn);
+    await this.page.waitForSelector(loginSel.logoutLnk, { state: 'visible' });
+
+    console.log('[LOGOUT] 9. Click logout');
+    await this.page.click(loginSel.logoutLnk);
+
+    await this.page.waitForSelector(loginSel.tab, { state: 'visible' });
+    await this.scrollToBottom();
+    console.log(`[DONE] Registered, logged-in & logged-out with ${email}`);
+    return email;
+  }
+
+  async registerAndReturnEmail(first: string, last: string, pwd: string) {
+    return await this.registerLoginContinuous(first, last, pwd);
   }
 }
