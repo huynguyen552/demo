@@ -1,18 +1,28 @@
 import { defineConfig, devices } from '@playwright/test';
+import { readFileSync } from 'fs';
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+const env = process.env.TEST_ENV || 'stag';
+const { baseURL } = JSON.parse(readFileSync(`./tests/data/env.${env}.json`, 'utf-8'));
 
-/**
- * See https://playwright.dev/docs/test-configuration.
- */
 export default defineConfig({
-  testDir: './tests',
+  testDir: './tests/specs',
+  fullyParallel: true,
+  retries: 0,
+  workers: 1,               // for every project
+  reporter: [['html', { outputFolder: 'playwright-report', open: 'never' }]],
+  use: {
+    baseURL,
+    trace: 'retain-on-failure',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
+  },
+  projects: [
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
+  ],
+});
+export default defineConfig({
+  testDir: './src',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
