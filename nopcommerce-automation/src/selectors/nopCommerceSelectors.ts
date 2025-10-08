@@ -40,3 +40,10 @@ export const detailSel = {
   imgByAlt: '//img[@alt="Picture of Apple iPhone 16 128GB"]',
   title   : '//h1[@itemprop="name"]',
 } as const;
+/* ---------- DESKTOP CATEGORY ---------- */
+export const desktopSel = {
+  topMenu     : '//ul[@class="top-menu notmobile"]//a[contains(text(),"Computers")]',
+  desktopsSub : '//ul[@class="sublist first-level"]//a[contains(text(),"Desktops")]',
+  sortDropdown: '//select[@id="products-orderby"]',
+  itemName    : '//h2[@class="product-title"]/a',
+} as const;
