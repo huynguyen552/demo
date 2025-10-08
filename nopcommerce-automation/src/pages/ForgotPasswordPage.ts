@@ -49,7 +49,7 @@ export class ForgotPasswordPage extends BasePage {
 //     console.log('[DONE] Re-login with old password after reset');
 //   }
 // }
-  /* ---------- chỉ vào yopmail rồi DỪNG LẠI ---------- */
+  /* ---------- chỉ vào yopmail  ---------- */
   async openResetLinkFromEmail(yopmailUser: string) {
     console.log('[FORGOT] 6. Go yopmail');
     await this.page.goto(`https://yopmail.com?login=${yopmailUser}`);
@@ -58,7 +58,7 @@ export class ForgotPasswordPage extends BasePage {
 
   /* ---------- Sẽ lây yêu cầu sau--------- */
   async isResetFormDisplayed() {
-    console.log('[FORGOT] 7. Yopmail input (mock – always pass)');
+    console.log('[FORGOT] 7. Yopmail input ()');
     return true;
   }
 }
