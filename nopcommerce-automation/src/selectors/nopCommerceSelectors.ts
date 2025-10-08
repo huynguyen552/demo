@@ -20,8 +20,8 @@ export const loginSel = {
 
 /* ---------- FORGOT PASS ---------- */
 export const forgotSel = {
-  forgotLnk : '//span[@class="forgot-password"]/a',
+  forgotLnk : '//span[@class="forgot-password"]',
   email     : '//input[@id="Email"]',
-  sendBtn   : '//button[@name="send-email"]',
+  sendBtn   : '//button[@name="send-email" and text()="Recover"]',
   successMsg: '//div[@class="bar-notification success"]',
 } as const;
