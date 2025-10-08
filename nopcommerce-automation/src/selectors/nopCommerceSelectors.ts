@@ -25,3 +25,18 @@ export const forgotSel = {
   sendBtn   : '//button[@name="send-email" and text()="Recover"]',
   successMsg: '//div[@class="bar-notification success"]',
 } as const;
+
+/* ---------- SEARCH ---------- */
+export const searchSel = {
+  box        : '//div[@class="search-box store-search-box"]//input',
+  button     : '//button[@class="button-1 search-box-button"]',
+  suggestion : '//div[@class="ui-menu-item-wrapper"]',
+  iphone128  : '//li[@class="ui-menu-item"]//span[text()="Apple iPhone 16 128GB"]',
+  resultBar  : '//div[@class="search-results"]',
+  itemName   : '//h2[@class="product-title"]/a',
+} as const;
+/* ---------- PRODUCT DETAIL ---------- */
+export const detailSel = {
+  imgByAlt: '//img[@alt="Picture of Apple iPhone 16 128GB"]',
+  title   : '//h1[@itemprop="name"]',
+} as const;
