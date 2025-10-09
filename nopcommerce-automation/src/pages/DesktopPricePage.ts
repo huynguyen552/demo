@@ -64,7 +64,7 @@ export class DesktopPricePage extends BasePage {
     const prices = await this.getAllPrices();
     if (prices.length === 0) {
       console.warn('[PRICE] ⚠️ No prices to verify, skipping check.');
-      return true; // tránh fail test
+      return true;
     }
     const ok = prices.every(p => p <= 1000);
     console.log(`[PRICE] 5. All prices ≤ 1000 ? ${ok}`, prices);

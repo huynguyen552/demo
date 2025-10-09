@@ -4,7 +4,7 @@ import { regSel, loginSel } from '../selectors/nopCommerceSelectors';
 export class RegisterPage extends BasePage {
   private genEmail() { return `auto${Date.now()}@yopmail.com`; }
 
-  /* ---------- 1 lượt Register → Login → Logout ---------- */
+  /* ---------- Register → Login → Logout ---------- */
   async registerLoginContinuous(first: string, last: string, pwd: string) {
     console.log('[REG] 1. Go homepage');
     await this.page.goto('https://demo.nopcommerce.com');
@@ -31,7 +31,7 @@ export class RegisterPage extends BasePage {
 
     console.log('[LOGIN] 6. Open login form');
     await this.page.click(loginSel.logoutLnk);
-    await this.scrollToBottom();          // scroll sau click
+    await this.scrollToBottom();          // scroll to bottom
     await this.page.click(loginSel.tab);
     console.log('[LOGIN] 7. Fill login');
     await this.page.fill(loginSel.email, email);

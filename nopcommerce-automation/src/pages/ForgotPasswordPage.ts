@@ -2,7 +2,7 @@ import { BasePage } from './BasePage';
 import { forgotSel, loginSel } from '../selectors/nopCommerceSelectors';
 
 export class ForgotPasswordPage extends BasePage {
-  /* ---------- yêu cầu gửi mail reset ---------- */
+  /* ---------- Navigate to mailbox for mail reset ---------- */
   async requestReset(email: string) {
     console.log('[FORGOT] 1. Go homepage');
     await this.page.goto('https://demo.nopcommerce.com');
@@ -21,20 +21,20 @@ export class ForgotPasswordPage extends BasePage {
     console.log('[FORGOT] 5. Sent reset mail');
   }
 
-//   /* ---------- mở link từ yopmail ---------- */
+//   /* ---------- update later ---------- */
 //   async openResetLinkFromEmail(yopmailUser: string) {
 //     console.log('[FORGOT] 6. Go yopmail');
 //     await this.page.goto(`https://yopmail.com?login=${yopmailUser}`);
 //   }
 //
-//   /* ---------- kiểm tra đã vào form đặt lại pass ---------- */
+//   /* ---------- reset pass ---------- */
 //   async isResetFormDisplayed() {
 //     const visible = await this.page.locator('//input[@id="NewPassword"]').isVisible();
 //     console.log(`[FORGOT] 7. Reset form displayed = ${visible}`);
 //     return visible;
 //   }
 //
-//   /* ---------- sau reset: mở lại login và đăng nhập bằng email & password cũ ---------- */
+//   /* ---------- relogin---------- */
 //   async loginAfterReset(email: string, pwd: string) {
 //     console.log('[FORGOT] 13. Re-open login page');
 //     await this.page.goto('https://demo.nopcommerce.com/login');
@@ -49,14 +49,14 @@ export class ForgotPasswordPage extends BasePage {
 //     console.log('[DONE] Re-login with old password after reset');
 //   }
 // }
-  /* ---------- chỉ vào yopmail  ---------- */
+  /* ---------- navigate to yopmail  ---------- */
   async openResetLinkFromEmail(yopmailUser: string) {
     console.log('[FORGOT] 6. Go yopmail');
     await this.page.goto(`https://yopmail.com?login=${yopmailUser}`);
     console.log('[FORGOT] 6.1. Chờ update yêu cầu sau');
   }
 
-  /* ---------- Sẽ lây yêu cầu sau--------- */
+  /* ---------- update later-------- */
   async isResetFormDisplayed() {
     console.log('[FORGOT] 7. Yopmail input ()');
     return true;

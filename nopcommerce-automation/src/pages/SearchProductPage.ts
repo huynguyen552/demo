@@ -2,7 +2,7 @@ import { BasePage } from './BasePage';
 import { searchSel } from '../selectors/nopCommerceSelectors';
 
 export class SearchProductPage extends BasePage {
-  /* ---------- gõ keyword & click đúng suggestion ---------- */
+  /* ---------- enter keyword & click suggestion ---------- */
   async searchWithSuggestion(keyword: string) {
     console.log(`[SEARCH] 1. Type keyword: ${keyword}`);
     await this.page.goto('https://demo.nopcommerce.com');
@@ -13,7 +13,7 @@ export class SearchProductPage extends BasePage {
     await this.page.locator(searchSel.iphone128).click();
   }
 
-  /* ---------- verify đã vào detail ---------- */
+  /* ---------- verify ---------- */
   async verifyOnDetailPage() {
     console.log('[SEARCH] 3. Verify detail page loaded');
     const img = this.page.locator('//img[@alt="Picture of Apple iPhone 16 128GB"]');

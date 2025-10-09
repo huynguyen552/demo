@@ -12,7 +12,7 @@ export default defineConfig({
   },
   reporter: [
     ['html', { open: 'never' }],
-    ['line'], // log chi tiết terminal
+    ['line'],
   ],
 
   projects: [
