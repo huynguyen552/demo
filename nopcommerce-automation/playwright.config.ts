@@ -1,29 +1,37 @@
 import { defineConfig, devices } from '@playwright/test';
-import { readFileSync } from 'fs';
-
-const env = process.env.TEST_ENV || 'stag';
-const { baseURL } = JSON.parse(readFileSync(`./tests/data/env.${env}.json`, 'utf-8'));
 
 export default defineConfig({
-  testDir: './tests/specs',
-  fullyParallel: false,
-  retries: 0,
-  workers: 1,
-  reporter: [['html', { outputFolder: 'playwright-report', open: 'never' }]],
+  testDir: './tests',
+  fullyParallel: true,
+  workers: 2,
   use: {
-    baseURL,
-    headless: false,
-    viewport: null,                 // ← full screen
-    launchOptions: {
-      args: ['--start-maximized'],  // ← Firefox max window
-      slowMo: 2000,                 // ← chờ 2 giây giữa các hành động
-    },
-    trace: 'retain-on-failure',
-    screenshot: 'only-on-failure',
+    ...devices['Desktop Firefox'],
     video: 'retain-on-failure',
+    screenshot: 'only-on-failure',
+    trace: 'retain-on-failure',
   },
+  reporter: [
+    ['html', { open: 'never' }],
+    ['line'], // log chi tiết terminal
+  ],
+
   projects: [
-   // { name: 'firefox1', use: { ...devices['Desktop Firefox'] } },
-    { name: 'firefox2', use: { ...devices['Desktop Firefox'] } },
+    {
+      name: 'firefox-group1',
+      testMatch: [
+        '**/register-login-onepage.spec.ts',
+        '**/register-then-forgot.spec.ts',
+        '**/search-iphone-detail.spec.ts',
+        '**/search-iphone-fail.spec.ts',
+      ],
+    },
+    {
+      name: 'firefox-group2',
+      testMatch: [
+        '**/explore-desktop-sort-both.spec.ts',
+        '**/filter-desktop-price-1000-drag.spec.ts',
+        '**/notebook-apple-filter.spec.ts',
+      ],
+    },
   ],
 });
