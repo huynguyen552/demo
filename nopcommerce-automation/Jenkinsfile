@@ -1,0 +1,66 @@
+
+pipeline {
+  agent any
+
+  // Run at 23:00( timezone server Jenkins)
+  triggers { cron('0 23 * * *') }
+
+  options {
+    timestamps()
+    ansiColor('xterm')
+    disableConcurrentBuilds()
+    buildDiscarder(logRotator(numToKeepStr: '20', artifactNumToKeepStr: '20'))
+    timeout(time: 45, unit: 'MINUTES')
+  }
+
+  environment {
+    NODE_ENV = 'ci'
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
+
+    stage('Install deps') {
+      steps {
+        sh '''
+          set -euxo pipefail
+          node -v || true
+          npm -v || true
+
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
+
+          npx playwright install
+        '''
+      }
+    }
+
+    stage('Test') {
+      steps {
+        sh '''
+          set -euxo pipefail
+          npx playwright test --reporter=junit || npx playwright test
+        '''
+      }
+      post {
+        always {
+          junit allowEmptyResults: true, testResults: '**/test-results/**/*.xml, **/results.xml, **/junit.xml'
+          archiveArtifacts allowEmptyArchive: true, artifacts: 'playwright-report/**'
+        }
+      }
+    }
+  }
+
+  post {
+    always {
+      deleteDir()
+    }
+  }
+}
